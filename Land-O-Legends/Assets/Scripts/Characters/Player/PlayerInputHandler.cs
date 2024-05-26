@@ -2,15 +2,22 @@ using UnityEngine;
 
 public class PlayerInputHandler : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    PlayerInputs _inputActions;
+    PlayerController _player;
+
+    void Awake()
     {
-        
+        _player = GetComponent<PlayerController>();
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnEnable()
     {
-        
+        if (_inputActions == null)
+        {
+            _inputActions = new PlayerInputs();
+            _inputActions.PlayerActions.Move.performed += i => _player.HandleMoveInput(i.ReadValue<Vector2>());
+            _inputActions.PlayerActions.Sprint.performed += s => _player.HandleSprintInput();
+        }
+        _inputActions.Enable();
     }
 }
